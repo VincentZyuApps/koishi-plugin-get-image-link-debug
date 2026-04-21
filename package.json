@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-get-image-link-debug",
   "description": "获取图片链接，debug用的捏",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
