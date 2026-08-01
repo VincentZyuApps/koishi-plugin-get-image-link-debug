@@ -1,14 +1,13 @@
 {
   "name": "koishi-plugin-get-image-link-debug",
-  "description": "获取图片链接，debug用的捏",
-  "version": "0.1.0",
+  "description": "🖼️ 从聊天会话提取图片链接并生成下载命令",
+  "version": "0.1.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
     "dist"
   ],
-  "license": "MIT",
   "keywords": [
     "chatbot",
     "koishi",

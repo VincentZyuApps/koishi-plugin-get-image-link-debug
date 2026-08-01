@@ -1,18 +1,9 @@
-import { Context, Schema, h } from 'koishi'
+import { Context, h } from 'koishi'
+import { Config } from './config'
 
 export const name = 'get-image-link-debug'
-
-export interface Config {
-  command_of_get_link: boolean
-  enableQuote: boolean
-  codeBlock: boolean
-}
-
-export const Config: Schema<Config> = Schema.object({
-  command_of_get_link: Schema.boolean().default(false).description('🔧 是否开启 `获取链接` 的调试指令'),
-  enableQuote: Schema.boolean().default(true).description('💬 是否启用引用回复'),
-  codeBlock: Schema.boolean().default(false).description('📦 wget 或者 curl 命令是否使用代码块包裹'),
-})
+export { Config }
+export { usage } from './usage'
 
 export function apply(ctx: Context, config: Config) {
   const logger = ctx.logger
@@ -32,11 +23,11 @@ export function apply(ctx: Context, config: Config) {
     return mfaceUrls?.length > 0 ? mfaceUrls : null
   }
 
-  if (config.command_of_get_link) {
-    ctx.command('get-link [图片]')
-      .alias('gl')
-      .option('-w --wget <filename>', '输出 wget 下载命令')
-      .option('-c --curl <filename>', '输出 curl 下载命令')
+  if (config.enableRegisterCommand) {
+    ctx.command(`${config.commandName} [图片]`)
+      .alias(config.commandAlias)
+      .option('wget', '-w, --wget <filename:string> 输出 wget 下载命令')
+      .option('curl', '-c, --curl <filename:string> 输出 curl 下载命令')
       .action(async ({ session, options }, 图片) => {
         const wgetFile = (options as any).wget as string | undefined
         const curlFile = (options as any).curl as string | undefined
@@ -52,11 +43,11 @@ export function apply(ctx: Context, config: Config) {
           } else {
             if (wgetFile) {
               const wgetCmd = `wget -O "${wgetFile}" "${urlSelect[0]}"`
-              const output = config.codeBlock ? `\`\`\`\n${wgetCmd}\n\`\`\`` : wgetCmd
+              const output = config.enableCodeBlock ? `\`\`\`\n${wgetCmd}\n\`\`\`` : wgetCmd
               await send(session, output)
             } else if (curlFile) {
               const curlCmd = `curl -o "${curlFile}" "${urlSelect[0]}"`
-              const output = config.codeBlock ? `\`\`\`\n${curlCmd}\n\`\`\`` : curlCmd
+              const output = config.enableCodeBlock ? `\`\`\`\n${curlCmd}\n\`\`\`` : curlCmd
               await send(session, output)
             } else {
               await send(session, urlSelect)
@@ -72,11 +63,11 @@ export function apply(ctx: Context, config: Config) {
           } else {
             if (wgetFile) {
               const wgetCmd = `wget -O "${wgetFile}" "${urlSelect[0]}"`
-              const output = config.codeBlock ? `\`\`\`\n${wgetCmd}\n\`\`\`` : wgetCmd
+              const output = config.enableCodeBlock ? `\`\`\`\n${wgetCmd}\n\`\`\`` : wgetCmd
               await send(session, output)
             } else if (curlFile) {
               const curlCmd = `curl -o "${curlFile}" "${urlSelect[0]}"`
-              const output = config.codeBlock ? `\`\`\`\n${curlCmd}\n\`\`\`` : curlCmd
+              const output = config.enableCodeBlock ? `\`\`\`\n${curlCmd}\n\`\`\`` : curlCmd
               await send(session, output)
             } else {
               await send(session, urlSelect)
@@ -94,11 +85,11 @@ export function apply(ctx: Context, config: Config) {
           } else {
             if (wgetFile) {
               const wgetCmd = `wget -O "${wgetFile}" "${urlSelect[0]}"`
-              const output = config.codeBlock ? `\`\`\`\n${wgetCmd}\n\`\`\`` : wgetCmd
+              const output = config.enableCodeBlock ? `\`\`\`\n${wgetCmd}\n\`\`\`` : wgetCmd
               await send(session, output)
             } else if (curlFile) {
               const curlCmd = `curl -o "${curlFile}" "${urlSelect[0]}"`
-              const output = config.codeBlock ? `\`\`\`\n${curlCmd}\n\`\`\`` : curlCmd
+              const output = config.enableCodeBlock ? `\`\`\`\n${curlCmd}\n\`\`\`` : curlCmd
               await send(session, output)
             } else {
               await send(session, urlSelect)
